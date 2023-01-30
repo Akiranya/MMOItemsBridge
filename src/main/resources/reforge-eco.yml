@@ -1,0 +1,18 @@
+# How much money it costs for each modifier?
+
+# e.g., if the item has the "broken" modifier,
+# the final money cost will be: base cost + 10
+
+broken: 10
+shoddy: 10
+weak: 10
+damaged: 10
+keen: 100
+ruthless: 100
+zealous: 100
+hurtful: 100
+strong: 100
+unpleasant: 1000
+demonic: 1000
+superior: 1000
+godly: 1000

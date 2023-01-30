@@ -1,0 +1,6 @@
+sword:test:
+  money: 100
+  items:
+    - minecraft:stone/1
+    - minecraft:diamond/1
+    - itemsadder:iasurvival:ruby/2

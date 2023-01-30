@@ -10,15 +10,15 @@
     <version>2.0</version>
   </parent>
 
-  <artifactId>ExampleAddon</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <artifactId>MMOItemsHook</artifactId>
+  <version>1.0</version>
   <packaging>jar</packaging>
 
-  <name>ExampleAddon</name>
-  <description>An Example addon for BetterGUI</description>
+  <name>MMOItemsHook</name>
+  <description>Provides interactions with MMOItems</description>
 
   <properties>
-    <project.mainClass>me.hsgamer.bettergui.exampleaddon.ExampleAddon</project.mainClass>
+    <project.mainClass>me.hsgamer.bettergui.mmohook.MMOItemsHook</project.mainClass>
   </properties>
 
   <repositories>
@@ -26,5 +26,36 @@
       <id>codemc-public</id>
       <url>https://repo.codemc.io/repository/maven-public/</url>
     </repository>
+    <repository>
+      <id>papermc-repo</id>
+      <url>https://papermc.io/repo/repository/maven-public/</url>
+    </repository>
   </repositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>io.papermc.paper</groupId>
+      <artifactId>paper-api</artifactId>
+      <version>1.19.3-R0.1-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>cc.mewcraft</groupId>
+      <artifactId>MewCore</artifactId>
+      <version>5.12</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.lumine</groupId>
+      <artifactId>MythicLib-dist</artifactId>
+      <version>1.5.1-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>net.Indyuce</groupId>
+      <artifactId>MMOItems-API</artifactId>
+      <version>6.9.2-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
 </project>

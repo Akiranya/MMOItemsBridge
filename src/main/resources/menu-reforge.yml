@@ -1,0 +1,42 @@
+menu-settings:
+  menu-type: simple # You don't need to set this type. It's the default value
+  rows: 3
+  auto-refresh: -1
+  command: reforge
+  title: Reforge the item in you main hand
+  cached: false
+  creator: default
+
+preview-hand:
+  type: predicate
+  slot: 13
+  button:
+    read: hand
+  fallback:
+    id: barrier
+    name: "&fHold an item in your hand!"
+  view-requirement:
+    has-item:
+      condition: NOT(STREQ("{readinv_hand}","AIR"))
+
+# Reforge options:
+# 1. keepName
+# 2. keepLore
+# 3. keepEnchantments
+# 4. keepUpgrades
+# 5. keepGemStones
+# 6. keepSoulBind
+# 7. keepExternalSH
+# 8. reRoll
+# 9. keepModifications
+# 10. keepAdvancedEnchantments
+# 11. keepSkins
+# 12. KeepTier
+
+reforge-hand:
+  id: anvil
+  slot: 15
+  name: "&cClick to Reforge the item!"
+  action:
+    - "mmo-reforge(12345678): hand"
+    - "update-menu"
