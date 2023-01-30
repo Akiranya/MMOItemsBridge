@@ -1,11 +1,23 @@
 menu-settings:
-  menu-type: simple # You don't need to set this type. It's the default value
   rows: 3
   auto-refresh: -1
   command: reforge
-  title: Reforge the item in you main hand
+  title: 装备重铸
   cached: false
-  creator: default
+  creator: mini-title
+
+help:
+  position-x: 3
+  position-y: 2
+  id: feather
+  nbt: "{CustomModelData:2}"
+  name$: '<white>如何重铸装备？'
+  lore$:
+    - ''
+    - '<gray>▸ 点击查看 wiki'
+  close-on-click: true
+  action:
+    - 'player: how reforge'
 
 preview-hand:
   type: predicate
@@ -14,7 +26,7 @@ preview-hand:
     read: hand
   fallback:
     id: barrier
-    name: "&fHold an item in your hand!"
+    name: "&f请先手持要重铸的物品!"
   view-requirement:
     has-item:
       condition: NOT(STREQ("{readinv_hand}","AIR"))
@@ -34,9 +46,17 @@ preview-hand:
 # 12. KeepTier
 
 reforge-hand:
-  id: anvil
+  type: predicate
   slot: 15
-  name: "&cClick to Reforge the item!"
-  action:
-    - "mmo-reforge(12345678): hand"
-    - "update-menu"
+  button:
+    id: anvil
+    name: "&c点击重铸装备！"
+    action:
+      - "mmo-reforge(38): hand"
+      - "update-menu"
+  fallback:
+    id: barrier
+    name: "&f请先手持要重铸的物品!"
+  view-requirement:
+    has-item:
+      condition: NOT(STREQ("{readinv_hand}","AIR"))
