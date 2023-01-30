@@ -1,32 +1,23 @@
 menu-settings:
-  rows: 3
+  rows: 5
   auto-refresh: -1
   command: reforge
   title: 装备重铸
   cached: false
   creator: mini-title
 
-help:
-  position-x: 3
-  position-y: 2
-  id: feather
-  nbt: "{CustomModelData:2}"
-  name$: '<white>如何重铸装备？'
-  lore$:
-    - ''
-    - '<gray>▸ 点击查看 wiki'
-  close-on-click: true
-  action:
-    - 'player: how reforge'
-
 preview-hand:
   type: predicate
-  slot: 13
+  position-x: 5
+  position-y: 3
   button:
     read: hand
   fallback:
     id: barrier
-    name: "&f请先手持要重铸的物品!"
+    name$: "<red>没有可重铸的装备"
+    lore$:
+      - "<white>请先手持想要重铸的装备"
+      - "<white>然后再与哥布林进行对话"
   view-requirement:
     has-item:
       condition: NOT(STREQ("{readinv_hand}","AIR"))
@@ -45,18 +36,58 @@ preview-hand:
 # 11. keepSkins
 # 12. KeepTier
 
-reforge-hand:
+reforge-hand-1:
   type: predicate
-  slot: 15
+  position-x: 3
+  position-y: 3
   button:
     id: anvil
-    name: "&c点击重铸装备！"
+    name$: "<red>点击重铸该装备！"
+    lore$:
+      - "<white>本次装备重铸将..."
+      - "<gray>- 重新打造属性"
+      - "<gray>- 重新打造词条"
+      - "<gray>- <red>不保留附魔"
+      - ""
+      - "<gray>造价：<white>1000 <green>软妹币"
+      - "<gray>材料：<white>右击查看"
     action:
-      - "mmo-reforge(38): hand"
+      - "mmo-reforge(18): hand"
       - "update-menu"
   fallback:
     id: barrier
-    name: "&f请先手持要重铸的物品!"
+    name$: "<red>没有可重铸的装备"
+    lore$:
+      - "<white>请先手持想要重铸的装备"
+      - "<white>然后再与哥布林进行对话"
+  view-requirement:
+    has-item:
+      condition: NOT(STREQ("{readinv_hand}","AIR"))
+
+reforge-hand-2:
+  type: predicate
+  position-x: 7
+  position-y: 3
+  button:
+    id: anvil
+    name$: "<red>点击重铸该装备！"
+    lore$:
+      - "<white>本次装备重铸将..."
+      - "<gray>- 重新打造属性"
+      - "<gray>- 重新打造词条"
+      - "<gray>- <green>保留所有附魔"
+      - ""
+      - "<gray>造价：<white>50 <yellow>米币"
+      - "<gray>材料：<white>右击查看"
+    action:
+      - "mmo-reforge(138): hand"
+      - "update-menu"
+  fallback:
+    id: barrier
+    name$: "<red>没有可重铸的装备"
+    lore$:
+      - "<white>请先手持想要重铸的装备"
+      - "<white>然后再与哥布林进行对话"
   view-requirement:
     has-item:
       condition: NOT(STREQ("{readinv_hand}","AIR"))
