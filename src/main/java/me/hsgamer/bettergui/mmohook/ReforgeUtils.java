@@ -18,7 +18,7 @@ public class ReforgeUtils {
 
     /**
      * <p>
-     * A convenience method to create ReforgeOption instance from a sting representation.
+     * A convenience method to create ReforgeOption instance from a string representation.
      * <p>
      * Following is the order of options from the source code of MMOItems:
      * <ol>
@@ -37,7 +37,7 @@ public class ReforgeUtils {
      * </ol>
      *
      * @param options a string like <pre>"124589"</pre> to indicate which reforge option should be "true". Omitting one
-     *                means set that option to "false".
+     *                means setting that option to "false".
      *
      * @return a reforge options
      */
