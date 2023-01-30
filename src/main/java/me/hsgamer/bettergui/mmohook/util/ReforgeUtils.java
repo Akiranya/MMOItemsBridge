@@ -1,4 +1,4 @@
-package me.hsgamer.bettergui.mmohook;
+package me.hsgamer.bettergui.mmohook.util;
 
 import net.Indyuce.mmoitems.api.ReforgeOptions;
 import net.Indyuce.mmoitems.api.util.MMOItemReforger;

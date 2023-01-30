@@ -1,6 +1,8 @@
 package me.hsgamer.bettergui.mmohook;
 
 import me.hsgamer.bettergui.builder.ActionBuilder;
+import me.hsgamer.bettergui.mmohook.action.ItemReforgeAction;
+import me.hsgamer.bettergui.mmohook.config.MessageConfig;
 import me.hsgamer.hscore.bukkit.addon.PluginAddon;
 import me.hsgamer.hscore.bukkit.config.BukkitConfig;
 import me.hsgamer.hscore.config.Config;

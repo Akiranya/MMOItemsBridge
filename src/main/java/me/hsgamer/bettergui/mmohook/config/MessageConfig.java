@@ -1,4 +1,4 @@
-package me.hsgamer.bettergui.mmohook;
+package me.hsgamer.bettergui.mmohook.config;
 
 import me.hsgamer.hscore.bukkit.addon.PluginAddon;
 import me.hsgamer.hscore.bukkit.config.BukkitConfig;

@@ -1,9 +1,11 @@
-package me.hsgamer.bettergui.mmohook;
+package me.hsgamer.bettergui.mmohook.action;
 
 import cc.mewcraft.mewcore.util.UtilComponent;
 import cc.mewcraft.mewcore.util.UtilInventory;
 import me.hsgamer.bettergui.api.action.BaseAction;
 import me.hsgamer.bettergui.builder.ActionBuilder;
+import me.hsgamer.bettergui.mmohook.MMOItemsHook;
+import me.hsgamer.bettergui.mmohook.util.ReforgeUtils;
 import me.hsgamer.hscore.task.element.TaskProcess;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
