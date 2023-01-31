@@ -27,11 +27,11 @@ public final class ReforgeCommon {
 
     // Reading plugin items from 3rd party plugins are kinda expensive.
     // We cache it in case the players keep fast trying reforging items.
-    public static final LoadingCache<String, Map<PluginItem<?>, Integer>> COST_CACHE = CacheBuilder.newBuilder()
+    public static final LoadingCache<String, Map<PluginItem<?>, Integer>> ITEM_COST_CACHE = CacheBuilder.newBuilder()
         .expireAfterAccess(Duration.ofSeconds(60))
         .build(new CacheLoader<>() {
             @Override public @NotNull Map<PluginItem<?>, Integer> load(final @NotNull String key) throws NullPointerException {
-                Map<PluginItem<?>, Integer> costMap = new HashMap<>(); // mappings: item -> amount
+                Map<PluginItem<?>, Integer> itemCost = new HashMap<>(); // mappings: item -> amount
                 List<String> configLines = Main.INSTANCE.reforgeAvailableConfig.getOriginal().getStringList(key);
                 for (final String line : configLines) {
                     String[] split = line.split("/", 2); // left to the "/" is item key, right to the "/" is the amount
@@ -39,32 +39,32 @@ public final class ReforgeCommon {
                     int costAmount = Integer.parseInt(split[1]); // e.g. "3"
                     PluginItem<?> pi = PluginItemRegistry.get().fromReferenceNullable(costKey);
                     if (pi != null) {
-                        costMap.put(pi, costAmount);
+                        itemCost.put(pi, costAmount);
                     } else {
                         throw new NullPointerException("Cannot load plugin item \"%s\" in the reforge config".formatted(costKey));
                     }
                 }
-                return costMap;
+                return itemCost;
             }
         });
 
     public static void flush() {
-        COST_CACHE.invalidateAll();
+        ITEM_COST_CACHE.invalidateAll();
     }
 
-    public static @Nullable Map<PluginItem<?>, Integer> getCostMap(
+    public static @Nullable Map<PluginItem<?>, Integer> getItemCost(
         @NotNull final PluginItem<?> slotPi
     ) {
-        Map<PluginItem<?>, Integer> costMap;
+        Map<PluginItem<?>, Integer> itemCost;
         try {
             // If the try-block finishes without exception, that means
             // the Plugin Items are correctly loaded and safe to use.
-            costMap = ReforgeCommon.COST_CACHE.get(Objects.requireNonNull(slotPi).getItemId());
+            itemCost = ReforgeCommon.ITEM_COST_CACHE.get(Objects.requireNonNull(slotPi).getItemId());
         } catch (ExecutionException e) { // non-existing item id are found in the reforge config file.
             Main.INSTANCE.getPlugin().getLogger().severe(e.getMessage());
             return null;
         }
-        return costMap;
+        return itemCost;
     }
 
     /**
@@ -73,7 +73,7 @@ public final class ReforgeCommon {
      * @return true if it can be reforged; otherwise false
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean canReforge(
+    public static boolean isReforgeAvailable(
         @Nullable final ItemStack itemInSlot,
         @Nullable final PluginItem<?> slotPi
     ) {
@@ -94,12 +94,12 @@ public final class ReforgeCommon {
      *
      * @return a list of {@link ItemCheckSession}s.
      */
-    public static @NotNull List<ItemCheckSession> checkCost(
+    public static @NotNull List<ItemCheckSession> checkItemCost(
         @NotNull final PlayerInventory inventory,
-        @NotNull final Map<PluginItem<?>, Integer> costMap
+        @NotNull final Map<PluginItem<?>, Integer> itemCost
     ) {
         List<ItemCheckSession> sessionList = new ArrayList<>();
-        costMap.forEach((key, value) -> sessionList.add(createItemCheckSession(inventory, key::matches, value)));
+        itemCost.forEach((key, value) -> sessionList.add(createItemCheckSession(inventory, key::matches, value)));
         return sessionList;
     }
 

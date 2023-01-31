@@ -9,7 +9,6 @@ import me.hsgamer.bettergui.builder.ActionBuilder;
 import me.hsgamer.bettergui.mmohook.Main;
 import me.hsgamer.bettergui.mmohook.ReforgeCommon;
 import me.hsgamer.bettergui.mmohook.util.ReforgeUtils;
-import me.hsgamer.hscore.bukkit.utils.ItemUtils;
 import me.hsgamer.hscore.task.element.TaskProcess;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -19,7 +18,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -51,69 +49,40 @@ public class ItemReforgeAction extends BaseAction {
                 PlayerInventory inventory = player.getInventory();
                 ItemStack itemInSlot = UtilInventory.getItemInSlot(inventory, slot, null);
                 PluginItem<?> slotPi = PluginItemRegistry.get().fromItemStackNullable(itemInSlot);
-                if (!ReforgeCommon.canReforge(itemInSlot, slotPi)) {
+                if (!ReforgeCommon.isReforgeAvailable(itemInSlot, slotPi)) {
                     player.sendMessage(UtilComponent.asComponent(Main.INSTANCE.messageConfig.reforgeFailed));
                     process.next();
                     return;
                 }
 
-                // Check if the player has all the item cost
-                Map<PluginItem<?>, Integer> costMap = ReforgeCommon.getCostMap(slotPi);
-                if (costMap == null) {
-                    player.sendMessage(UtilComponent.asComponent(Main.INSTANCE.messageConfig.internalError));
-                    process.next();
-                    return;
-                }
-                List<ItemUtils.ItemCheckSession> allSessions = ReforgeCommon.checkCost(inventory, costMap);
-                for (final ItemUtils.ItemCheckSession session : allSessions) {
-                    if (!session.isAllMatched) {
-                        Component component = ReforgeCommon.makePluginItemText(costMap);
-                        if (component == null) {
-                            player.sendMessage(UtilComponent.asComponent(Main.INSTANCE.messageConfig.internalError));
-                            process.next();
-                            return;
-                        }
-                        TagResolver resolver = TagResolver.resolver(
-                            Placeholder.component("target", itemInSlot.displayName()),
-                            Placeholder.component("item_cost", component)
-                        );
-                        player.sendMessage(UtilComponent.asComponent(Main.INSTANCE.messageConfig.notEnoughItems, resolver));
-                        process.next();
-                        return;
-                    }
-                }
-
-                // All good, reforge the item
                 Optional<ItemStack> result = ReforgeUtils.reforge(itemInSlot, options);
                 if (result.isPresent()) {
-                    allSessions.forEach(session -> session.takeRunnable.run()); // take items out of player inventory
                     player.sendMessage(UtilComponent.asComponent(Main.INSTANCE.messageConfig.reforgeSucceeded));
                     inventory.setItemInMainHand(result.get());
-                    process.next();
                 } else {
                     Main.INSTANCE.getPlugin().getLogger().severe("MMOItems failed to reforge the item");
                     player.sendMessage(UtilComponent.asComponent(Main.INSTANCE.messageConfig.internalError));
-                    process.next();
                 }
+                process.next();
             };
 
             case "view" -> () -> {
                 PlayerInventory inventory = player.getInventory();
                 ItemStack itemInSlot = UtilInventory.getItemInSlot(inventory, slot, null);
                 PluginItem<?> slotPi = PluginItemRegistry.get().fromItemStackNullable(itemInSlot);
-                if (!ReforgeCommon.canReforge(itemInSlot, slotPi)) {
+                if (!ReforgeCommon.isReforgeAvailable(itemInSlot, slotPi)) {
                     player.sendMessage(UtilComponent.asComponent(Main.INSTANCE.messageConfig.viewFailed));
                     process.next();
                     return;
                 }
 
-                Map<PluginItem<?>, Integer> costMap = ReforgeCommon.getCostMap(slotPi);
-                if (costMap == null) {
+                Map<PluginItem<?>, Integer> itemCost = ReforgeCommon.getItemCost(slotPi);
+                if (itemCost == null) {
                     player.sendMessage(UtilComponent.asComponent(Main.INSTANCE.messageConfig.internalError));
                     process.next();
                     return;
                 }
-                Component component = ReforgeCommon.makePluginItemText(costMap);
+                Component component = ReforgeCommon.makePluginItemText(itemCost);
                 if (component == null) {
                     player.sendMessage(UtilComponent.asComponent(Main.INSTANCE.messageConfig.internalError));
                     process.next();

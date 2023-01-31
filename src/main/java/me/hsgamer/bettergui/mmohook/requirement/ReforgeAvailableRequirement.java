@@ -14,9 +14,12 @@ import org.bukkit.inventory.PlayerInventory;
 
 import java.util.UUID;
 
-public class ItemReforgeRequirement extends BaseRequirement<String> {
+/**
+ * Checks whether the item in the specific slot can be reforged, i.e., it is defined in the reforge config file.
+ */
+public class ReforgeAvailableRequirement extends BaseRequirement<String> {
 
-    public ItemReforgeRequirement(final RequirementBuilder.Input input) {
+    public ReforgeAvailableRequirement(final RequirementBuilder.Input input) {
         super(input);
     }
 
@@ -32,7 +35,7 @@ public class ItemReforgeRequirement extends BaseRequirement<String> {
         PlayerInventory inventory = player.getInventory();
         ItemStack itemInSlot = UtilInventory.getItemInSlot(inventory, value, null);
         final PluginItem<?> slotPi = PluginItemRegistry.get().fromItemStackNullable(itemInSlot);
-        return ReforgeCommon.canReforge(itemInSlot, slotPi)
+        return ReforgeCommon.isReforgeAvailable(itemInSlot, slotPi)
             ? Result.success()
             : Result.fail();
     }
