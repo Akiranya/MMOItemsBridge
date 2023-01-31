@@ -27,7 +27,7 @@ public final class ReforgeCommon {
 
     // Reading plugin items from 3rd party plugins are kinda expensive.
     // We cache it in case the players keep fast trying reforging items.
-    public static final LoadingCache<String, Map<PluginItem<?>, Integer>> CACHE = CacheBuilder.newBuilder()
+    public static final LoadingCache<String, Map<PluginItem<?>, Integer>> COST_CACHE = CacheBuilder.newBuilder()
         .expireAfterAccess(Duration.ofSeconds(60))
         .build(new CacheLoader<>() {
             @Override public @NotNull Map<PluginItem<?>, Integer> load(final @NotNull String key) throws NullPointerException {
@@ -49,15 +49,17 @@ public final class ReforgeCommon {
         });
 
     public static void flush() {
-        CACHE.invalidateAll();
+        COST_CACHE.invalidateAll();
     }
 
-    public static @Nullable Map<PluginItem<?>, Integer> getCostMap(@NotNull final PluginItem<?> slotPi) {
+    public static @Nullable Map<PluginItem<?>, Integer> getCostMap(
+        @NotNull final PluginItem<?> slotPi
+    ) {
         Map<PluginItem<?>, Integer> costMap;
         try {
             // If the try-block finishes without exception, that means
             // the Plugin Items are correctly loaded and safe to use.
-            costMap = ReforgeCommon.CACHE.get(Objects.requireNonNull(slotPi).getItemId());
+            costMap = ReforgeCommon.COST_CACHE.get(Objects.requireNonNull(slotPi).getItemId());
         } catch (ExecutionException e) { // non-existing item id are found in the reforge config file.
             Main.INSTANCE.getPlugin().getLogger().severe(e.getMessage());
             return null;
@@ -108,7 +110,9 @@ public final class ReforgeCommon {
      *
      * @return a hoverable text component of all the items; or null if internal error occurs
      */
-    public static @NotNull Component makeItemStackText(@NotNull final Map<ItemStack, Integer> map) {
+    public static @NotNull Component makeItemStackText(
+        @NotNull final Map<ItemStack, Integer> map
+    ) {
         TextComponent.Builder itemCostText = text();
         Iterator<Map.Entry<ItemStack, Integer>> iterator = map.entrySet().iterator();
         while (iterator.hasNext()) { // use iterator to properly add space between items
@@ -131,7 +135,9 @@ public final class ReforgeCommon {
      *
      * @return a hoverable text component of all the items; or null if internal error occurs
      */
-    public static @Nullable Component makePluginItemText(@NotNull final Map<PluginItem<?>, Integer> map) {
+    public static @Nullable Component makePluginItemText(
+        @NotNull final Map<PluginItem<?>, Integer> map
+    ) {
         HashMap<ItemStack, Integer> itemMap = new HashMap<>();
         for (final Map.Entry<PluginItem<?>, Integer> entry : map.entrySet()) {
             ItemStack item = entry.getKey().createItemStack();
