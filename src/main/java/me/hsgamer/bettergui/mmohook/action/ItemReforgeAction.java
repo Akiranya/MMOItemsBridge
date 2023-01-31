@@ -48,9 +48,9 @@ public class ItemReforgeAction extends BaseAction {
 
         final Runnable task = switch (action) {
             case "make" -> () -> {
-                final PlayerInventory inventory = player.getInventory();
-                final ItemStack itemInSlot = UtilInventory.getItemInSlot(inventory, slot, null);
-                final PluginItem<?> slotPi = PluginItemRegistry.get().fromItemStackNullable(itemInSlot);
+                PlayerInventory inventory = player.getInventory();
+                ItemStack itemInSlot = UtilInventory.getItemInSlot(inventory, slot, null);
+                PluginItem<?> slotPi = PluginItemRegistry.get().fromItemStackNullable(itemInSlot);
                 if (!ReforgeCommon.canReforge(itemInSlot, slotPi)) {
                     player.sendMessage(UtilComponent.asComponent(Main.INSTANCE.messageConfig.reforgeFailed));
                     process.next();
@@ -58,13 +58,13 @@ public class ItemReforgeAction extends BaseAction {
                 }
 
                 // Check if the player has all the item cost
-                final Map<PluginItem<?>, Integer> costMap = ReforgeCommon.getCostMap(slotPi);
+                Map<PluginItem<?>, Integer> costMap = ReforgeCommon.getCostMap(slotPi);
                 if (costMap == null) {
                     player.sendMessage(UtilComponent.asComponent(Main.INSTANCE.messageConfig.internalError));
                     process.next();
                     return;
                 }
-                final List<ItemUtils.ItemCheckSession> allSessions = ReforgeCommon.checkCost(inventory, costMap);
+                List<ItemUtils.ItemCheckSession> allSessions = ReforgeCommon.checkCost(inventory, costMap);
                 for (final ItemUtils.ItemCheckSession session : allSessions) {
                     if (!session.isAllMatched) {
                         Component component = ReforgeCommon.makePluginItemText(costMap);
@@ -84,7 +84,7 @@ public class ItemReforgeAction extends BaseAction {
                 }
 
                 // All good, reforge the item
-                final Optional<ItemStack> result = ReforgeUtils.reforge(itemInSlot, options);
+                Optional<ItemStack> result = ReforgeUtils.reforge(itemInSlot, options);
                 if (result.isPresent()) {
                     allSessions.forEach(session -> session.takeRunnable.run()); // take items out of player inventory
                     player.sendMessage(UtilComponent.asComponent(Main.INSTANCE.messageConfig.reforgeSucceeded));
