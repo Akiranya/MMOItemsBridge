@@ -36,6 +36,25 @@ preview-hand:
 # 11. keepSkins
 # 12. KeepTier
 
+reforge-hand-view:
+  type: predicate
+  position-x: 5
+  position-y: 1
+  button:
+    id: anvil
+    name$: "<aqua>查看重铸所需材料"
+    action:
+      - "reforge(a=view): hand"
+  fallback:
+    id: barrier
+    name$: "<red>没有可重铸的装备"
+    lore$:
+      - "<white>请先手持想要重铸的装备"
+      - "<white>然后再与哥布林进行对话"
+  view-requirement:
+    has-item:
+      condition: NOT(STREQ("{readinv_hand}","AIR"))
+
 reforge-hand-1:
   type: predicate
   position-x: 3
@@ -48,11 +67,8 @@ reforge-hand-1:
       - "<gray>- 重新打造属性"
       - "<gray>- 重新打造词条"
       - "<gray>- <red>不保留附魔"
-      - ""
-      - "<gray>造价：<white>1000 <green>软妹币"
-      - "<gray>材料：<white>右击查看"
     action:
-      - "mmo-reforge(18): hand"
+      - "reforge(a=make,o=18): hand"
       - "update-menu"
   fallback:
     id: barrier
@@ -76,11 +92,8 @@ reforge-hand-2:
       - "<gray>- 重新打造属性"
       - "<gray>- 重新打造词条"
       - "<gray>- <green>保留所有附魔"
-      - ""
-      - "<gray>造价：<white>50 <yellow>米币"
-      - "<gray>材料：<white>右击查看"
     action:
-      - "mmo-reforge(138): hand"
+      - "reforge(a=make,o=138): hand"
       - "update-menu"
   fallback:
     id: barrier

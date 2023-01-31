@@ -4,16 +4,27 @@ import net.Indyuce.mmoitems.api.ReforgeOptions;
 import net.Indyuce.mmoitems.api.util.MMOItemReforger;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Optional;
+
+/**
+ * Provides convenience methods to interact with MMOItems.
+ */
 public class ReforgeUtils {
-    public static ItemStack reforge(ItemStack itemStack, String options) {
+    /**
+     * @param itemStack the item to be reforged
+     * @param options   some reforge options
+     *
+     * @return empty if it cannot be reforged
+     */
+    public static Optional<ItemStack> reforge(ItemStack itemStack, String options) {
         MMOItemReforger mod = new MMOItemReforger(itemStack);
         if (!mod.hasTemplate()) {
-            return itemStack;
+            return Optional.empty();
         }
         if (!mod.reforge(parseOptions(options))) {
-            return itemStack;
+            return Optional.empty();
         }
-        return mod.getResult();
+        return Optional.ofNullable(mod.getResult());
     }
 
     /**

@@ -18,7 +18,8 @@
   <description>Provides interactions with MMOItems</description>
 
   <properties>
-    <project.mainClass>me.hsgamer.bettergui.mmohook.MMOItemsHook</project.mainClass>
+    <java.version>17</java.version>
+    <project.mainClass>me.hsgamer.bettergui.mmohook.Main</project.mainClass>
   </properties>
 
   <repositories>
