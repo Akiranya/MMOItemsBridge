@@ -39,8 +39,8 @@ public class ItemReforgeAction extends BaseAction {
 
         final String slot = input.value; // read the slot value
         final Map<String, String> optionAsMap = input.getOptionAsMap();
-        final String action = optionAsMap.get("a");
-        final String options = optionAsMap.get("o");
+        final String action = optionAsMap.get("a"); // accepted: "make", "view"
+        final String options = optionAsMap.get("o"); // accepted: "o=12367"
         if (action == null) {
             process.next();
             return;
