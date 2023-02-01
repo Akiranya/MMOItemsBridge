@@ -51,7 +51,7 @@ public class ReforgeInfoModifier extends ItemMetaModifier {
                 Component.text("×")
                     .append(Component.text(entry.getValue()))
                     .appendSpace()
-                    .append(item.displayName())
+                    .append(item.displayName().hoverEvent(null))
             );
         }
 
