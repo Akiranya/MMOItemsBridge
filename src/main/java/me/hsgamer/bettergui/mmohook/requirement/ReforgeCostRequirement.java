@@ -42,12 +42,14 @@ public class ReforgeCostRequirement extends TakableRequirement<String> {
         ItemStack itemInSlot = UtilInventory.getItemInSlot(inventory, value, null);
         final PluginItem<?> slotPi = PluginItemRegistry.get().fromItemStackNullable(itemInSlot);
         if (slotPi == null) { // should be handled with other "requirement"
+            Main.INSTANCE.getPlugin().getLogger().severe(getClass().getName() + ": `slotPi` is null");
             player.sendMessage(UtilComponent.asComponent(Main.INSTANCE.messageConfig.internalError));
             return Result.fail();
         }
 
         Map<PluginItem<?>, Integer> itemCost = ReforgeCommon.getItemCost(slotPi);
         if (itemCost == null) { // should be handled with other "requirement"
+            Main.INSTANCE.getPlugin().getLogger().severe(getClass().getName() + ": `itemCost` is null");
             player.sendMessage(UtilComponent.asComponent(Main.INSTANCE.messageConfig.internalError));
             return Result.fail();
         }
@@ -63,6 +65,7 @@ public class ReforgeCostRequirement extends TakableRequirement<String> {
             if (component != null) {
                 sessions.forEach(session -> session.takeRunnable.run()); // take items out of player inventory
             } else {
+                Main.INSTANCE.getPlugin().getLogger().severe(getClass().getName() + ": `component` is null");
                 player.sendMessage(UtilComponent.asComponent(Main.INSTANCE.messageConfig.internalError));
             }
             process.next();

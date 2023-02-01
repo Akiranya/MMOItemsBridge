@@ -60,7 +60,7 @@ public class ItemReforgeAction extends BaseAction {
                     player.sendMessage(UtilComponent.asComponent(Main.INSTANCE.messageConfig.reforgeSucceeded));
                     inventory.setItemInMainHand(result.get());
                 } else {
-                    Main.INSTANCE.getPlugin().getLogger().severe("MMOItems failed to reforge the item");
+                    Main.INSTANCE.getPlugin().getLogger().severe(getClass().getName() + ": MMOItems failed to reforge the item");
                     player.sendMessage(UtilComponent.asComponent(Main.INSTANCE.messageConfig.internalError));
                 }
                 process.next();
@@ -78,12 +78,14 @@ public class ItemReforgeAction extends BaseAction {
 
                 Map<PluginItem<?>, Integer> itemCost = ReforgeCommon.getItemCost(slotPi);
                 if (itemCost == null) {
+                    Main.INSTANCE.getPlugin().getLogger().severe(getClass().getName() + ": `itemCost` is null");
                     player.sendMessage(UtilComponent.asComponent(Main.INSTANCE.messageConfig.internalError));
                     process.next();
                     return;
                 }
                 Component component = ReforgeCommon.makePluginItemText(itemCost);
                 if (component == null) {
+                    Main.INSTANCE.getPlugin().getLogger().severe(getClass().getName() + ": `component` is null");
                     player.sendMessage(UtilComponent.asComponent(Main.INSTANCE.messageConfig.internalError));
                     process.next();
                     return;
