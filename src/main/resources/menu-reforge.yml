@@ -5,6 +5,11 @@ menu-settings:
   title: 装备重铸
   cached: false
   creator: mini-title
+  open-action:
+    - "delay: 20"
+    - "update-menu"
+  close-action:
+    - "meta(available)"
 
 preview-hand:
   type: predicate
@@ -14,13 +19,16 @@ preview-hand:
     read: hand
   fallback:
     id: barrier
-    name$: "<red>没有可重铸的装备"
+    name$: "<yellow>没有可重铸的装备！"
     lore$:
-      - "<white>请先手持想要重铸的装备"
-      - "<white>然后再与哥布林进行对话"
+      - "<gray>请先<white><b>手持</b></white>想要重铸的装备"
+      - "<gray>然后再与哥布林进行对话"
+  check-only-on-creation: false
   view-requirement:
-    has-item:
-      condition: NOT(STREQ("{readinv_hand}","AIR"))
+    has:
+      reforge-available: hand
+      success-action:
+        - "meta(available): true"
 
 # Reforge options:
 # 1. keepName
@@ -38,69 +46,87 @@ preview-hand:
 
 reforge-hand-view:
   type: predicate
-  position-x: 5
-  position-y: 1
-  button:
-    id: anvil
-    name$: "<aqua>查看重铸所需材料"
-    action:
-      - "reforge(a=view): hand"
-  fallback:
-    id: barrier
-    name$: "<red>没有可重铸的装备"
-    lore$:
-      - "<white>请先手持想要重铸的装备"
-      - "<white>然后再与哥布林进行对话"
-  view-requirement:
-    has-item:
-      condition: NOT(STREQ("{readinv_hand}","AIR"))
-
-reforge-hand-1:
-  type: predicate
   position-x: 3
   position-y: 3
   button:
-    id: anvil
-    name$: "<red>点击重铸该装备！"
-    lore$:
-      - "<white>本次装备重铸将..."
-      - "<gray>- 重新打造属性"
-      - "<gray>- 重新打造词条"
-      - "<gray>- <red>不保留附魔"
+    id: feather
+    nbt: "{CustomModelData:2}"
+    name$: "<dark_gray>正在重铸：<white>[{readinv_name_hand}]"
+    reforge-cost-lore: hand
     action:
-      - "reforge(a=make,o=18): hand"
-      - "update-menu"
-  fallback:
-    id: barrier
-    name$: "<red>没有可重铸的装备"
-    lore$:
-      - "<white>请先手持想要重铸的装备"
-      - "<white>然后再与哥布林进行对话"
+      - "reforge(a=view): hand"
+  fallback: empty
+  check-only-on-creation: false
   view-requirement:
-    has-item:
-      condition: NOT(STREQ("{readinv_hand}","AIR"))
+    has:
+      condition: "{meta_available}"
+
+reforge-hand-1:
+  type: predicate
+  position-x: 7
+  position-y: 2
+  button:
+    id: anvil
+    name$: "<yellow>点击开始重铸"
+    lore$:
+      - ""
+      - "<gray>本次装备重铸将为你..."
+      - " <dark_gray>✔ 重新打造属性"
+      - " <dark_gray>✔ 重新打造词条"
+      - " <dark_gray>✘ <#822b2b>不保留附魔*"
+      - ""
+      - "<gray>造价：<white>1200 <green>软妹币"
+  fallback: empty
+  check-only-on-creation: false
+  view-requirement:
+    has:
+      condition: "{meta_available}"
+  click-requirement:
+    default:
+      reforge:
+        gems:
+          value: 1200/R
+          take: true
+        reforge-item-cost:
+          value: hand
+          take: true
+        fail-action:
+          - "tell$(mini): <gray>你携带的材料/软妹币不足，无法进行重铸"
+        success-action:
+          - "reforge(a=make,o=8): hand"
+          - "update-menu"
 
 reforge-hand-2:
   type: predicate
   position-x: 7
-  position-y: 3
+  position-y: 4
   button:
     id: anvil
-    name$: "<red>点击重铸该装备！"
+    name$: "<yellow>点击开始重铸"
     lore$:
-      - "<white>本次装备重铸将..."
-      - "<gray>- 重新打造属性"
-      - "<gray>- 重新打造词条"
-      - "<gray>- <green>保留所有附魔"
-    action:
-      - "reforge(a=make,o=138): hand"
-      - "update-menu"
-  fallback:
-    id: barrier
-    name$: "<red>没有可重铸的装备"
-    lore$:
-      - "<white>请先手持想要重铸的装备"
-      - "<white>然后再与哥布林进行对话"
+      - ""
+      - "<gray>本次装备重铸将为你..."
+      - " <dark_gray>✔ 重新打造属性"
+      - " <dark_gray>✔ 重新打造词条"
+      - " <dark_gray>✔ <#2b822b>保留所有附魔"
+      - ""
+      - "<gray>造价：<white>180 <yellow>米币"
+  fallback: empty
+  check-only-on-creation: false
   view-requirement:
-    has-item:
-      condition: NOT(STREQ("{readinv_hand}","AIR"))
+    has:
+      condition: "{meta_available}"
+  click-requirement:
+    default:
+      reforge:
+        gems:
+          value: 180/C
+          take: true
+        reforge-item-cost:
+          value: hand
+          take: true
+        fail-action:
+          - "tell$(mini): <gray>你携带的材料/米币不足，无法进行重铸"
+        success-action:
+          - "reforge(a=make,o=38): hand"
+          - "update-menu"

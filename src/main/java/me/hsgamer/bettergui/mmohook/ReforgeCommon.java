@@ -32,7 +32,7 @@ public final class ReforgeCommon {
         .build(new CacheLoader<>() {
             @Override public @NotNull Map<PluginItem<?>, Integer> load(final @NotNull String key) throws NullPointerException {
                 Map<PluginItem<?>, Integer> itemCost = new HashMap<>(); // mappings: item -> amount
-                List<String> configLines = Main.INSTANCE.reforgeAvailableConfig.getOriginal().getStringList(key);
+                List<String> configLines = Main.INSTANCE.reforgeAvailable.getOriginal().getStringList(key);
                 for (final String line : configLines) {
                     String[] split = line.split("/", 2); // left to the "/" is item key, right to the "/" is the amount
                     String costKey = split[0]; // e.g. "plugin:item"
@@ -83,7 +83,7 @@ public final class ReforgeCommon {
         if (slotPi == null || !slotPi.getPlugin().equals("mmoitems")) { // it's not of a MMOItem; of course cannot be reforged
             return false;
         }
-        if (!Main.INSTANCE.reforgeAvailableConfig.getOriginal().getKeys(false).contains(slotPi.getItemId())) { // it's of a MMOItem, but not present in the reforge config
+        if (!Main.INSTANCE.reforgeAvailable.getOriginal().getKeys(false).contains(slotPi.getItemId())) { // it's of a MMOItem, but not present in the reforge config
             return false;
         }
         return true;
