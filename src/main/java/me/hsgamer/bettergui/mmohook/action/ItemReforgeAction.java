@@ -57,7 +57,8 @@ public class ItemReforgeAction extends BaseAction {
 
                 Optional<ItemStack> result = ReforgeUtils.reforge(itemInSlot, options);
                 if (result.isPresent()) {
-                    player.sendMessage(UtilComponent.asComponent(Main.INSTANCE.messageConfig.reforgeSucceeded));
+                    TagResolver.Single resolver = Placeholder.component("result", result.get().displayName());
+                    player.sendMessage(UtilComponent.asComponent(Main.INSTANCE.messageConfig.reforgeSucceeded, resolver));
                     inventory.setItemInMainHand(result.get());
                 } else {
                     Main.INSTANCE.getPlugin().getLogger().severe(getClass().getName() + ": MMOItems failed to reforge the item");
